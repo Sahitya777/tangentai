@@ -4,8 +4,6 @@ import { Tooltip } from "@chakra-ui/react";
 
 export default function PromptForm(props) {
   const [prompt] = useState();
-  const [image, setImage] = useState(null);
-
   return (
     <form onSubmit={props.onSubmit} className="animate-in fade-in duration-700">
       <div className="flex flex-row justify-center items-center p-2">
@@ -22,7 +20,7 @@ export default function PromptForm(props) {
         >
           Generate
         </button>
-        <div className="m-1">
+        <div className="md:flex m-1 hidden">
           <Tooltip
             hasArrow
             label="What's a good prompt ?
@@ -30,7 +28,7 @@ export default function PromptForm(props) {
             rounded="md"
           
           >
-            <text className="text-2xl shadow-md">
+            <text className="text-2xl">
               <GrCircleQuestion />
             </text>
           </Tooltip>

@@ -110,7 +110,7 @@ export default function Home() {
           </button>
         </div>
       </div>
-      <div className="flex flex-col justify-center items-center p-2 mt-12">
+      <div className="flex flex-col justify-center items-center p-2 mt-4 lg:mt-12">
         <text className="text-2xl lg:text-5xl p-4 bg-clip-text font-bold text-transparent bg-gradient-to-r from-gray-400 antialiased to to-gray-800">
           What&apos;s on your mind ?
         </text>
