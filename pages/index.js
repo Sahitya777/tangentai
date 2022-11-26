@@ -20,12 +20,10 @@ function useIsMounted() {
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 export default function Home() {
-
   const [predictions, setPredictions] = useState([]);
   const [error, setError] = useState(null);
   const [maskImage, setMaskImage] = useState(null);
   const [userUploadedImage, setUserUploadedImage] = useState(null);
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -116,36 +114,38 @@ export default function Home() {
         <text className="text-2xl lg:text-5xl p-4 bg-clip-text font-bold text-transparent bg-gradient-to-r from-gray-400 antialiased to to-gray-800">
           What&apos;s on your mind ?
         </text>
-        <PromptForm onSubmit={handleSubmit}/>
+        <PromptForm onSubmit={handleSubmit} />
+      </div>
+      <div className="pt-[10px] p-2">
+        {error && <div>{error}</div>}
+        <div className="border-hairline max-w-[512px] lg:p-0 mx-auto relative rounded-3xl">
+          <Dropzone
+            onImageDropped={setUserUploadedImage}
+            predictions={predictions}
+            userUploadedImage={userUploadedImage}
+          />
+          <div className="bg-gray-50 relative max-h-[500px] w-full flex items-stretch rounded-lg border-2 border-dashed shadow-md border-gray-600">
+            <Canvas
+              predictions={predictions}
+              userUploadedImage={userUploadedImage}
+              onDraw={setMaskImage}
+            />
+          </div>
+        </div>
       </div>
       <div className="fixed inset-x-0 bottom-0 border-t border-1 border-gray-400 border-rouned-lg">
         <div className="mx-auto max-w-7xl py-3 px-3 sm:px-6 lg:px-8">
           <div className="flex flex-wrap items-center justify-between">
             <div className="flex w-0 flex-1 items-center">
               <p className="ml-3 truncate font-medium ">
-                <span className="md:inline text-gray-500">Made with 🍑 by Rohan and Manan</span>
+                <span className="md:inline text-gray-500">
+                  Made with 🍑 by Rohan and Manan
+                </span>
               </p>
             </div>
           </div>
         </div>
       </div>
-      <div className="pt-[22px] p-2">
-        {error && <div>{error}</div>}
-        <div className="border-hairline max-w-[512px] lg:p-0 mx-auto relative rounded-3xl">
-          <Dropzone
-          onImageDropped={setUserUploadedImage}
-          predictions={predictions}
-          userUploadedImage={userUploadedImage}/>
-          <div className="bg-gray-50 relative max-h-[500px] w-full flex items-stretch rounded-lg border-2 border-dashed shadow-md border-gray-600">
-            <Canvas
-            predictions={predictions}
-            userUploadedImage={userUploadedImage}
-            onDraw={setMaskImage}/>
-          </div>
-        </div>
-
-      </div>
-      
     </div>
   );
 }
@@ -160,19 +160,3 @@ function readAsDataURL(file) {
     fr.readAsDataURL(file);
   });
 }
-    //         <div style={{ paddingTop: "22px" }}>
-    //           {error && <div>{error}</div>}
-    //           <div className="border-hairline max-w-[512px] mx-auto relative rounded-3xl">
-    //             <Dropzone
-    //               onImageDropped={setUserUploadedImage}
-    //               predictions={predictions}
-    //               userUploadedImage={userUploadedImage}
-    //             />
-    //             <div className="bg-gray-50 relative max-h-[512px] w-full flex items-stretch rounded-md">
-    //               <Canvas
-    //                 predictions={predictions}
-    //                 userUploadedImage={userUploadedImage}
-    //                 onDraw={setMaskImage}
-    //               />
-    //             </div>
-    //           </div>
