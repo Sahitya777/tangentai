@@ -2,6 +2,7 @@ import { useState } from "react";
 import Canvas from "components/canvas";
 import PromptForm from "components/prompt-form";
 import Banner from "components/banner";
+import TopBanner from "components/topbanner";
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -103,7 +104,7 @@ export default function Home() {
         </div>
       </div>
       <div className="flex flex-col justify-center items-center p-2 mt-4 lg:mt-12">
-        <h1 className="text-3xl lg:text-6xl mt-0 lg:mt-0 p-4 font-bold text-gray-800">
+        <h1 className="text-4xl md:text-6xl lg:text-6xl mt-5 lg:mt-0 p-4 font-bold text-gray-800">
           What&apos;s on your mind ?
         </h1>
         <PromptForm onSubmit={handleSubmit} />
@@ -117,7 +118,12 @@ export default function Home() {
               userUploadedImage={userUploadedImage}
               onDraw={setMaskImage}
             />
-            <Banner />
+            <div className="flex lg:hidden md:hidden">
+              <TopBanner />
+            </div>
+            <div className="hidden lg:flex md:flex">
+              <Banner />
+            </div>
           </div>
         </div>
       </div>
