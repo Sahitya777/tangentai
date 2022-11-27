@@ -9,7 +9,7 @@ export default function PromptForm(props) {
           type="text"
           defaultValue={prompt}
           name="prompt"
-          className="bg-transparent relative overflow-hidden rounded-full py-1.5 px-4 text-sm leading-6 ring-1 ring-gray-900/10 hover:ring-gray-900/20"
+          className="bg-transparent w-[250px] lg:w-[500px] md:w-[350px] relative overflow-hidden rounded-full py-1.5 px-4 text-sm leading-6 ring-1 ring-gray-900/10 hover:ring-gray-900/20"
           placeholder="Enter a prompt..."
         />
         <button

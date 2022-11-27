@@ -104,15 +104,17 @@ export default function Home() {
         </div>
       </div>
       <div className="flex flex-col justify-center items-center p-2 mt-4 lg:mt-12">
-        <h1 className="text-4xl md:text-6xl lg:text-6xl mt-5 lg:mt-0 p-4 font-bold text-gray-800">
+        <h1 className="text-3xl md:text-6xl lg:text-6xl mt-5 lg:mt-0 p-4 font-bold text-gray-800">
           What&apos;s on your mind ?
         </h1>
-        <PromptForm onSubmit={handleSubmit} />
+        <div className="mt-2">
+          <PromptForm onSubmit={handleSubmit} />
+        </div>
       </div>
       <div className="pt-[10px] p-2">
         {error && <div>{error}</div>}
-        <div className="border-hairline max-w-[512px] lg:p-0 mx-auto relative rounded-3xl">
-          <div className="bg-transparent max-h-[500px] w-full flex items-stretch rounded-lg border-gray-600">
+        <div className="border-hairline max-w-[512px]  lg:p-0 mx-auto relative rounded-3xl">
+          <div className="bg-transparent max-h-[455px] w-full flex items-stretch rounded-lg border-gray-600">
             <Canvas
               predictions={predictions}
               userUploadedImage={userUploadedImage}

@@ -22,7 +22,7 @@ export default function TopBanner() {
                 href="https://rohanphw.notion.site/Tangent-AI-978ec36ea968484a9c5556808ac604e8"
                 target="_blank"
                 rel="noreferrer"
-                className="flex items-center justify-center rounded-md border border-transparent bg-white px-4 py-2 text-sm font-medium shadow-sm hover:bg-gray-100 text-gray-500 ring-1 ring-gray-900/10 hover:ring-gray-900/20"
+                className="flex items-center justify-center rounded-md border border-transparent bg-opacity-25 bg-gray-50 px-4 py-2 text-sm font-medium shadow-sm hover:bg-gray-100 text-gray-500 ring-1 ring-gray-900/10 hover:ring-gray-900/20"
               >
                 Learn more
               </a>
