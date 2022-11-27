@@ -67,7 +67,6 @@ export default function Home() {
   return (
     <div className="isolate bg-white">
       <title>Tangent</title>
-      <Banner />
 
       <div className="absolute inset-x-0 top-[-10rem] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[-20rem]">
         <svg
@@ -118,6 +117,7 @@ export default function Home() {
               userUploadedImage={userUploadedImage}
               onDraw={setMaskImage}
             />
+            <Banner />
           </div>
         </div>
       </div>
