@@ -1,6 +1,4 @@
 import { useState } from "react";
-import { GrCircleQuestion } from "react-icons/gr";
-import { Tooltip } from "@chakra-ui/react";
 
 export default function PromptForm(props) {
   const [prompt] = useState();
@@ -11,50 +9,16 @@ export default function PromptForm(props) {
           type="text"
           defaultValue={prompt}
           name="prompt"
-          className=" border-2 shadow-md border-blue-300 rounded-lg focus:outline-none text-gray-400 p-2 focus:border-blue-400"
+          className="bg-transparent relative overflow-hidden rounded-full py-1.5 px-4 text-sm leading-6 ring-1 ring-gray-900/10 hover:ring-gray-900/20"
           placeholder="Enter a prompt..."
         />
         <button
           type="submit"
-          className="text-gray-400 shadow-md border-2 p-2 border-blue-300 hover:border-blue-400 rounded-lg hover:bg-gray-100 hover:text-gray-400 m-2"
+          className="relative overflow-hidden rounded-full py-1.5 px-4 text-sm leading-6 ring-1 ring-gray-900/10 hover:ring-gray-900/20 m-2"
         >
           Generate
         </button>
-        <div className="md:flex m-1 hidden">
-          <Tooltip
-            hasArrow
-            label="What's a good prompt ?
-            A balanced combination of colour scheme, scene description and maybe reference to any artist or a designer with picture quality defined"
-            rounded="md"
-          
-          >
-            <text className="text-2xl">
-              <GrCircleQuestion />
-            </text>
-          </Tooltip>
-        </div>
       </div>
-
-      {/* <Flex>
-      <input
-          type="text"
-          defaultValue={prompt}
-          name="prompt"
-          placeholder="Enter a prompt..."
-          className="block w-full flex-grow rounded-l-md"
-
-          style={{padding:"6px", background:"none", color:"white", width:"00px", border:"1px solid #2F3150"}}
-        >
-          </input>
-
-        <button
-          className="text-black rounded-r-md text-small inline-block px-3 flex-none"
-          type="submit"
-          style={{background:"#2F3150", color:"white"}}
-        >
-          Generate
-        </button>
-      </Flex> */}
     </form>
   );
 }

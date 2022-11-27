@@ -43,7 +43,7 @@ export default class Canvas extends React.Component {
                   alt={"prediction" + index}
                   key={"prediction" + index}
                   layout="fill"
-                  className="absolute animate-in fade-in"
+                  className="absolute animate-in fade-in rounded-lg shadow-lg"
                   style={{ zIndex: index }}
                   src={prediction.lastImage}
                 />

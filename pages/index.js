@@ -1,21 +1,7 @@
 import { useState } from "react";
 import Canvas from "components/canvas";
 import PromptForm from "components/prompt-form";
-import Dropzone from "components/dropzone";
-
-function useIsMounted() {
-  const isMounted = useRef(false);
-
-  useEffect(() => {
-    isMounted.current = true;
-
-    return () => {
-      isMounted.current = false;
-    };
-  }, []);
-
-  return useCallback(() => isMounted.current, []);
-}
+import Banner from "components/banner";
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -78,53 +64,55 @@ export default function Home() {
     }
   };
 
-  const startOver = async (e) => {
-    e.preventDefault();
-    setPredictions([]);
-    setError(null);
-    setMaskImage(null);
-    setUserUploadedImage(null);
-  };
-
   return (
-    <div className="font-serif">
+    <div className="isolate bg-white">
       <title>Tangent</title>
+      <Banner />
+
+      <div className="absolute inset-x-0 top-[-10rem] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[-20rem]">
+        <svg
+          className="relative left-[calc(50%-11rem)] -z-10 h-[21.1875rem] max-w-none -translate-x-1/2 rotate-[30deg] sm:left-[calc(50%-30rem)] sm:h-[42.375rem]"
+          viewBox="0 0 1155 678"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            fill="url(#45de2b6b-92d5-4d68-a6a0-9b9b2abad533)"
+            fillOpacity=".3"
+            d="M317.219 518.975L203.852 678 0 438.341l317.219 80.634 204.172-286.402c1.307 132.337 45.083 346.658 209.733 145.248C936.936 126.058 882.053-94.234 1031.02 41.331c119.18 108.451 130.68 295.337 121.53 375.223L855 299l21.173 362.054-558.954-142.079z"
+          />
+          <defs>
+            <linearGradient
+              id="45de2b6b-92d5-4d68-a6a0-9b9b2abad533"
+              x1="1155.49"
+              x2="-78.208"
+              y1=".177"
+              y2="474.645"
+              gradientUnits="userSpaceOnUse"
+            >
+              <stop stopColor="#9089FC" />
+              <stop offset={1} stopColor="#FF80B5" />
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
       <div id="header" className="flex flex-row h-20 w-full p-2 ">
-        {/* <text className="text-black font-black text-3xl">
-          Tangent
-        </text> */}
-        <div className="ml-20 md:ml-2 md:mr-2 m-2 p-2">
-          <div className="text-center">
-            <h1 className="lg:text-3xl text-2xl font-bold">
-              <span className="text-blue-200 mr-1">{" // "}</span> Tangent AI{" "}
-              <span className="text-blue-200 ml-1">{" // "}</span>
-            </h1>
-            <p className="mt-2 text-xs lg:text-base">
-              ~ AI Generated NFTs on Tezos ~
-            </p>
-          </div>
-        </div>
         <div className="items-center justify-end md:flex md:flex-1 p-2 ml-16 hidden">
-          <button className="text-gray-700 shadow-md font-medium border-2 p-2 border-blue-200 hover:border-blue-300 rounded-lg hover:bg-gray-100">
+          <button className="inline-block rounded-lg px-3 py-1.5 text-sm font-semibold leading-6 text-gray-500 shadow-sm ring-1 ring-gray-900/10 hover:ring-gray-900/20">
             Connect Wallet
           </button>
         </div>
       </div>
       <div className="flex flex-col justify-center items-center p-2 mt-4 lg:mt-12">
-        <text className="text-2xl lg:text-5xl p-4 bg-clip-text font-bold text-transparent bg-gradient-to-r from-gray-400 antialiased to to-gray-800">
+        <h1 className="text-3xl lg:text-6xl mt-0 lg:mt-0 p-4 font-bold text-gray-800">
           What&apos;s on your mind ?
-        </text>
+        </h1>
         <PromptForm onSubmit={handleSubmit} />
       </div>
       <div className="pt-[10px] p-2">
         {error && <div>{error}</div>}
         <div className="border-hairline max-w-[512px] lg:p-0 mx-auto relative rounded-3xl">
-          <Dropzone
-            onImageDropped={setUserUploadedImage}
-            predictions={predictions}
-            userUploadedImage={userUploadedImage}
-          />
-          <div className="bg-gray-50 relative max-h-[500px] w-full flex items-stretch rounded-lg border-2 border-dashed shadow-md border-gray-600">
+          <div className="bg-transparent max-h-[500px] w-full flex items-stretch rounded-lg border-gray-600">
             <Canvas
               predictions={predictions}
               userUploadedImage={userUploadedImage}
@@ -133,19 +121,6 @@ export default function Home() {
           </div>
         </div>
       </div>
-      {/* <div className="fixed inset-x-0 bottom-0 border-t border-1 border-gray-400 border-rouned-lg">
-        <div className="mx-auto max-w-7xl py-3 px-3 sm:px-6 lg:px-8">
-          <div className="flex flex-wrap items-center justify-between">
-            <div className="flex w-0 flex-1 items-center">
-              <p className="ml-3 truncate font-medium ">
-                <span className="md:inline text-gray-500">
-                  Made with 🍑 by Rohan and Manan
-                </span>
-              </p>
-            </div>
-          </div>
-        </div>
-      </div> */}
     </div>
   );
 }

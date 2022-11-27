@@ -13,6 +13,7 @@
     "@chakra-ui/react": "^2.3.5",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
+    "@heroicons/react": "^2.0.13",
     "@mui/material": "^5.10.15",
     "@rainbow-me/rainbowkit": "^0.7.0",
     "buffer-to-data-url": "^1.0.0",
