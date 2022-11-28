@@ -96,13 +96,6 @@ export default function Home() {
           </defs>
         </svg>
       </div>
-      <div id="header" className="flex flex-row h-20 w-full p-2 ">
-        <div className="items-center justify-end md:flex md:flex-1 p-2 ml-16 hidden">
-          <button className="inline-block rounded-lg px-3 py-1.5 text-sm font-semibold leading-6 text-gray-500 shadow-sm ring-1 ring-gray-900/10 hover:ring-gray-900/20">
-            Connect Wallet
-          </button>
-        </div>
-      </div>
       <div className="absolute inset-x-0 bottom-0 -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]">
         <svg
           className="relative left-[calc(50%+3rem)] h-[21.1875rem] max-w-none -translate-x-1/2 sm:left-[calc(50%+36rem)] sm:h-[42.375rem]"
@@ -130,7 +123,7 @@ export default function Home() {
           </defs>
         </svg>
       </div>
-      <div className="flex flex-col justify-center items-center p-2 mt-4 lg:mt-12">
+      <div className="flex flex-col justify-center items-center p-2 mt-16 lg:mt-16">
         <h1 className="text-3xl md:text-6xl lg:text-6xl mt-5 lg:mt-0 p-4 font-bold text-gray-800">
           What&apos;s on your mind ?
         </h1>
