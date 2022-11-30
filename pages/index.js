@@ -66,7 +66,7 @@ export default function Home() {
   };
 
   return (
-    <div className="isolate bg-white ">
+    <div className="isolate bg-white font-poppins">
       <title>Tangent</title>
 
       <div className="absolute inset-x-0 top-[-10rem] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[-20rem]">

@@ -10,9 +10,9 @@ module.exports = {
   ],
   theme: {
     extend: {
-      // fontFamily: {
-      //   space: ["DM Serif Text", ...defaultTheme.fontFamily.sans],
-      // },
+      fontFamily: {
+        space: ["Poppins", ...defaultTheme.fontFamily.sans],
+      },
     },
   },
   plugins: [require("tailwindcss-animate")],

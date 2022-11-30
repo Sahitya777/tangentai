@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import Spinner from "components/spinner";
-
+import { Skeleton } from "@chakra-ui/react";
 export default class Canvas extends React.Component {
   constructor(props) {
     super(props);
@@ -61,16 +61,8 @@ export default class Canvas extends React.Component {
 
         {/* SPINNER */}
         {predicting && (
-          <div
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-            style={{ zIndex: predictions.length + 100 }}
-          >
-            <div className="p-4 w-40 bg-gray-100 text-center rounded-lg animate-in zoom-in">
-              <Spinner />
-              <p className="pt-3 opacity-30 text-center text-md text-gray-800">
-                {lastPrediction.status}
-              </p>
-            </div>
+          <div>
+            <Skeleton rounded={"7px"} height={{lg:"550px", md:"455px", sm:"455px"}} width="512px">{lastPrediction.status}</Skeleton>
           </div>
         )}
 
