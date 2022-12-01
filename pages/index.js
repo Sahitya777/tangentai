@@ -1,12 +1,16 @@
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
 import Canvas from "components/canvas";
 import PromptForm from "components/prompt-form";
 import Banner from "components/banner";
 import TopBanner from "components/topbanner";
+import { TezosContext } from "context/TezosContext";
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 export default function Home() {
+  const { wallet, tezos } = useContext(TezosContext);
+  const [tzAddres, setTzAddress] = useState("");
+
   const [predictions, setPredictions] = useState([]);
   const [error, setError] = useState(null);
   const [maskImage, setMaskImage] = useState(null);
@@ -64,6 +68,24 @@ export default function Home() {
       }
     }
   };
+
+  async function connectWallet() {
+    let walletAddress;
+
+    const active = await wallet.client.getActiveAccount();
+    if (active) walletAddress = active;
+    else {
+      const permissions = await wallet.client.requestPermissions();
+      walletAddress = permissions.address;
+    }
+
+    setTzAddress(walletAddress);
+  }
+
+  async function disconnectWallet() {
+    await wallet.client.clearActiveAccount();
+    setTzAddress("");
+  }
 
   return (
     <div className="isolate bg-white font-poppins">
@@ -145,7 +167,11 @@ export default function Home() {
               <TopBanner />
             </div>
             <div className="hidden lg:flex md:flex">
-              <Banner />
+              <Banner
+                connect={connectWallet}
+                disconnect={disconnectWallet}
+                address={tzAddres}
+              />
             </div>
           </div>
         </div>

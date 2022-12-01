@@ -16,6 +16,8 @@
     "@heroicons/react": "^2.0.13",
     "@mui/material": "^5.10.15",
     "@rainbow-me/rainbowkit": "^0.7.0",
+    "@taquito/beacon-wallet": "^14.2.0",
+    "@taquito/taquito": "^14.2.0",
     "buffer-to-data-url": "^1.0.0",
     "ethers": "^5.7.1",
     "framer-motion": "^6.5.1",

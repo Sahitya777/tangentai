@@ -1,11 +1,14 @@
 import "../styles/globals.css";
 import { ChakraProvider } from "@chakra-ui/react";
+import { TezosProvider } from "context/TezosContext";
 
 function MyApp({ Component, pageProps }) {
   return (
-    <ChakraProvider>
-      <Component {...pageProps} />
-    </ChakraProvider>
+    <TezosProvider>
+      <ChakraProvider>
+        <Component {...pageProps} />
+      </ChakraProvider>
+    </TezosProvider>
   );
 }
 
