@@ -4,6 +4,8 @@ import PromptForm from "components/prompt-form";
 import Banner from "components/banner";
 import TopBanner from "components/topbanner";
 import { TezosContext } from "context/TezosContext";
+import Header from "components/header";
+
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -145,7 +147,10 @@ export default function Home() {
           </defs>
         </svg>
       </div>
-      <div className="flex flex-col justify-center items-center p-2 mt-16 lg:mt-16">
+      <Header connect={connectWallet}
+      disconnect={disconnectWallet}
+      address={tzAddres}/>
+      <div className="flex flex-col justify-center items-center p-2 mt-28 lg:mt-16">
         <h1 className="text-3xl md:text-6xl lg:text-6xl mt-5 lg:mt-0 p-4 font-bold text-gray-800">
           What&apos;s on your mind ?
         </h1>
@@ -164,7 +169,10 @@ export default function Home() {
             />
 
             <div className="flex lg:hidden md:hidden">
-              <TopBanner />
+              <TopBanner
+              connect={connectWallet}
+              disconnect={disconnectWallet}
+              address={tzAddres} />
             </div>
             <div className="hidden lg:flex md:flex">
               <Banner
