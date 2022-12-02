@@ -1,98 +1,9 @@
-import { useState, useContext, useEffect } from "react";
-import Canvas from "components/canvas";
-import PromptForm from "components/prompt-form";
-import Banner from "components/banner";
-import TopBanner from "components/topbanner";
-import { TezosContext } from "context/TezosContext";
-import Header from "components/header";
+import { PaintBrushIcon } from "@heroicons/react/24/outline";
 
-
-const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-
-export default function Home() {
-  const { wallet, tezos } = useContext(TezosContext);
-  const [tzAddres, setTzAddress] = useState("");
-
-  const [predictions, setPredictions] = useState([]);
-  const [error, setError] = useState(null);
-  const [maskImage, setMaskImage] = useState(null);
-  const [userUploadedImage, setUserUploadedImage] = useState(null);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    const prevPrediction = predictions[predictions.length - 1];
-    const prevPredictionOutput = prevPrediction?.output
-      ? prevPrediction.output[prevPrediction.output.length - 1]
-      : null;
-
-    const body = {
-      prompt: e.target.prompt.value,
-      init_image: userUploadedImage
-        ? await readAsDataURL(userUploadedImage)
-        : // only use previous prediction as init image if there's a mask
-        maskImage
-        ? prevPredictionOutput
-        : null,
-      mask: maskImage,
-    };
-
-    const response = await fetch("/api/predictions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(body),
-    });
-    const prediction = await response.json();
-
-    if (response.status !== 201) {
-      setError(prediction.detail);
-      return;
-    }
-    setPredictions(predictions.concat([prediction]));
-
-    while (
-      prediction.status !== "succeeded" &&
-      prediction.status !== "failed"
-    ) {
-      await sleep(1000);
-      const response = await fetch("/api/predictions/" + prediction.id);
-      prediction = await response.json();
-      if (response.status !== 200) {
-        setError(prediction.detail);
-        return;
-      }
-      setPredictions(predictions.concat([prediction]));
-
-      if (prediction.status === "succeeded") {
-        setUserUploadedImage(null);
-      }
-    }
-  };
-
-  async function connectWallet() {
-    let walletAddress;
-
-    const active = await wallet.client.getActiveAccount();
-    if (active) walletAddress = active;
-    else {
-      const permissions = await wallet.client.requestPermissions();
-      walletAddress = permissions.address;
-    }
-
-    setTzAddress(walletAddress);
-  }
-
-  async function disconnectWallet() {
-    await wallet.client.clearActiveAccount();
-    setTzAddress("");
-  }
-
+export default function Example() {
   return (
-    <div className="isolate bg-white font-poppins">
+    <div className="isolate bg-white">
       <title>Tangent</title>
-
       <div className="absolute inset-x-0 top-[-10rem] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[-20rem]">
         <svg
           className="relative left-[calc(50%-11rem)] -z-10 h-[21.1875rem] max-w-none -translate-x-1/2 rotate-[30deg] sm:left-[calc(50%-30rem)] sm:h-[42.375rem]"
@@ -120,81 +31,108 @@ export default function Home() {
           </defs>
         </svg>
       </div>
-      <div className="absolute inset-x-0 bottom-0 -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]">
-        <svg
-          className="relative left-[calc(50%+3rem)] h-[21.1875rem] max-w-none -translate-x-1/2 sm:left-[calc(50%+36rem)] sm:h-[42.375rem]"
-          viewBox="0 0 1155 678"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            fill="url(#ecb5b0c9-546c-4772-8c71-4d3f06d544bc)"
-            fillOpacity=".3"
-            d="M317.219 518.975L203.852 678 0 438.341l317.219 80.634 204.172-286.402c1.307 132.337 45.083 346.658 209.733 145.248C936.936 126.058 882.053-94.234 1031.02 41.331c119.18 108.451 130.68 295.337 121.53 375.223L855 299l21.173 362.054-558.954-142.079z"
-          />
-          <defs>
-            <linearGradient
-              id="ecb5b0c9-546c-4772-8c71-4d3f06d544bc"
-              x1="1155.49"
-              x2="-78.208"
-              y1=".177"
-              y2="474.645"
-              gradientUnits="userSpaceOnUse"
-            >
-              <stop stopColor="#9089FC" />
-              <stop offset={1} stopColor="#FF80B5" />
-            </linearGradient>
-          </defs>
-        </svg>
-      </div>
-      <Header connect={connectWallet}
-      disconnect={disconnectWallet}
-      address={tzAddres}/>
-      <div className="flex flex-col justify-center items-center p-2 mt-28 lg:mt-16">
-        <h1 className="text-3xl md:text-6xl lg:text-6xl mt-5 lg:mt-0 p-4 font-bold text-gray-800">
-          What&apos;s on your mind ?
-        </h1>
-        <div className="mt-2">
-          <PromptForm onSubmit={handleSubmit} />
-        </div>
-      </div>
-      <div className="pt-[10px] p-2">
-        {error && <div>{error}</div>}
-        <div className="border-hairline max-w-[512px]  lg:p-0 mx-auto relative rounded-3xl">
-          <div className="bg-transparent max-h-[455px] lg:max-h-[550px] md:max-h-[455px] w-full flex items-stretch rounded-lg border-gray-600">
-            <Canvas
-              predictions={predictions}
-              userUploadedImage={userUploadedImage}
-              onDraw={setMaskImage}
-            />
 
-            <div className="flex lg:hidden md:hidden">
-              <TopBanner
-              connect={connectWallet}
-              disconnect={disconnectWallet}
-              address={tzAddres} />
-            </div>
-            <div className="hidden lg:flex md:flex">
-              <Banner
-                connect={connectWallet}
-                disconnect={disconnectWallet}
-                address={tzAddres}
-              />
+      <main>
+        <div className="relative px-6  lg:px-8">
+          <div className="relative mx-auto max-w-3xl pt-20 pb-32 sm:pt-48 sm:pb-40">
+            <div>
+              <div className="hidden mb-2 sm:flex sm:justify-center">
+                <div className="relative overflow-hidden mt-20 rounded-full py-1.5 px-4 text-sm leading-6 ring-1 ring-gray-900/10 hover:ring-gray-900/20">
+                  <span className="text-gray-600 ">
+                    <a
+                      href="https://rohanphw.notion.site/rohanphw/Tangent-AI-978ec36ea968484a9c5556808ac604e8"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="font-semibold"
+                    >
+                      <span className="absolute inset-0 hidden lg:absolute md:absolute" aria-hidden="true" />
+                      Read more
+                    </a>
+                  </span>
+                </div>
+              </div>
+              <div>
+                <div className="flex flex-row lg:justify-center md:justify-center justify-start   mt-40 lg:mt-0 md:mt-0">
+                  <span className="h-8 w-8 lg:h-12 lg:w-12 md:h-12 md:w-12 rounded-lg bg-gray-800 p-1.5 lg:p-3 md:p-3 mr-2 mt-1.5">
+                    <PaintBrushIcon
+                      className="h-5 w-5 lg:h-7 lg:w-7 md:h-7 md:w-7 text-white"
+                      aria-hidden="true"
+                    />
+                  </span>
+                  <h1 className="text-4xl font-bold tracking-tight sm:text-center sm:text-6xl">
+                    Tangent AI
+                  </h1>
+                </div>
+                <p className="mt-6 text-lg leading-8 text-gray-600 sm:text-center">
+                  Mint what you desire -- from cats, to rockets, to your
+                  favorite actors. Make your creativity a part of this world,
+                  forever.
+                </p>
+
+                <div className="mt-8 flex gap-x-4 sm:justify-center">
+                  <a
+                    href="/magic"
+                    rel="noreferrer"
+                    className="inline-block rounded-lg px-4 py-1.5 text-base font-semibold leading-7 text-gray-900 ring-1 ring-gray-900/10 hover:ring-gray-900/20"
+                  >
+                    Enter App &rarr;
+                  </a>
+
+                  <a
+                    href="https://rohanphw.notion.site/rohanphw/Tangent-AI-978ec36ea968484a9c5556808ac604e8"
+                    target="_blank"
+                    
+                    rel="noreferrer"
+                    className="inline-block rounded-lg px-4 py-1.5 lg:hidden md:hidden text-base font-semibold leading-7 text-gray-900 ring-1 ring-gray-900/10 hover:ring-gray-900/20"
+                  >
+                    Read More
+                  </a>
+                </div>
+              </div>
+              <div className="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]">
+                <svg
+                  className="relative left-[calc(50%+3rem)] h-[21.1875rem] max-w-none -translate-x-1/2 sm:left-[calc(50%+36rem)] sm:h-[42.375rem]"
+                  viewBox="0 0 1155 678"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fill="url(#ecb5b0c9-546c-4772-8c71-4d3f06d544bc)"
+                    fillOpacity=".3"
+                    d="M317.219 518.975L203.852 678 0 438.341l317.219 80.634 204.172-286.402c1.307 132.337 45.083 346.658 209.733 145.248C936.936 126.058 882.053-94.234 1031.02 41.331c119.18 108.451 130.68 295.337 121.53 375.223L855 299l21.173 362.054-558.954-142.079z"
+                  />
+                  <defs>
+                    <linearGradient
+                      id="ecb5b0c9-546c-4772-8c71-4d3f06d544bc"
+                      x1="1155.49"
+                      x2="-78.208"
+                      y1=".177"
+                      y2="474.645"
+                      gradientUnits="userSpaceOnUse"
+                    >
+                      <stop stopColor="#9089FC" />
+                      <stop offset={1} stopColor="#FF80B5" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+              </div>
+              <div className="fixed inset-x-0 bottom-0">
+                <div className="bg-transparent">
+                  <div className="mx-auto max-w-7xl py-3 px-3 sm:px-6 lg:px-8">
+                    <div className="flex flex-wrap items-center justify-between">
+                      <div className="flex w-0 flex-1 items-center">
+                        <p className="ml-3 truncate text-gray-600">
+                          <span className="inline">Powered by Tezos</span>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </main>
     </div>
   );
-}
-
-function readAsDataURL(file) {
-  return new Promise((resolve, reject) => {
-    const fr = new FileReader();
-    fr.onerror = reject;
-    fr.onload = () => {
-      resolve(fr.result);
-    };
-    fr.readAsDataURL(file);
-  });
 }
