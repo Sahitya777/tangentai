@@ -1,4 +1,5 @@
 import { PaintBrushIcon } from "@heroicons/react/24/outline";
+import Link from "next/link";
 
 export default function Example() {
   return (
@@ -70,13 +71,13 @@ export default function Example() {
                 </p>
 
                 <div className="mt-8 flex gap-x-4 sm:justify-center">
-                  <a
+                  <Link
                     href="/magic"
                     rel="noreferrer"
                     className="inline-block rounded-lg px-4 py-1.5 text-base font-semibold leading-7 text-gray-900 ring-1 ring-gray-900/10 hover:ring-gray-900/20"
                   >
                     Enter App &rarr;
-                  </a>
+                  </Link>
 
                   <a
                     href="https://rohanphw.notion.site/rohanphw/Tangent-AI-978ec36ea968484a9c5556808ac604e8"

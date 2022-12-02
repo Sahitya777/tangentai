@@ -2,7 +2,7 @@ import React, { createContext } from "react";
 import { BeaconWallet } from "@taquito/beacon-wallet";
 import { TezosToolkit } from "@taquito/taquito";
 
-const wallet = new BeaconWallet({ name: "LevTez" });
+const wallet = new BeaconWallet({ name: "TangentAI" });
 const tezos = new TezosToolkit("https://rpc.tzbeta.net");
 tezos.setProvider({ wallet });
 
