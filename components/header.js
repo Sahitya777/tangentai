@@ -5,14 +5,14 @@ export default function Header({ connect, disconnect, address }) {
         {address.length === 0 ? (
           <button
             onClick={() => connect()}
-            className="flex items-center justify-center rounded-md border border-transparent bg-white px-4 py-2 text-sm font-medium shadow-sm hover:bg-gray-100 text-gray-500 ring-1 ring-gray-900/10 hover:ring-gray-900/20"
+            className="flex items-center justify-center rounded-md border border-transparent bg-transparent px-4 py-2 text-sm font-medium shadow-sm text-gray-500 ring-1 ring-gray-900/10 hover:ring-gray-900/20"
           >
             Connect Wallet
           </button>
         ) : (
           <button
             onClick={() => disconnect()}
-            className="flex items-center justify-center rounded-md border border-transparent bg-white px-4 py-2 text-sm font-medium shadow-sm hover:bg-gray-100 text-gray-500 ring-1 ring-gray-900/10 hover:ring-gray-900/20"
+            className="flex items-center justify-center rounded-md border border-transparent bg-transparent px-4 py-2 text-sm font-medium shadow-sm text-gray-500 ring-1 ring-gray-900/10 hover:ring-gray-900/20"
           >
             {`${address?.slice(0, 6)}...`+`${address?.slice(-6)}`}
           </button>

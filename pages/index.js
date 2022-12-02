@@ -46,7 +46,10 @@ export default function Example() {
                       rel="noreferrer"
                       className="font-semibold"
                     >
-                      <span className="absolute inset-0 hidden lg:absolute md:absolute" aria-hidden="true" />
+                      <span
+                        className="absolute inset-0 hidden lg:absolute md:absolute"
+                        aria-hidden="true"
+                      />
                       Read more
                     </a>
                   </span>
@@ -71,18 +74,18 @@ export default function Example() {
                 </p>
 
                 <div className="mt-8 flex gap-x-4 sm:justify-center">
-                  <Link
-                    href="/magic"
-                    rel="noreferrer"
-                    className="inline-block rounded-lg px-4 py-1.5 text-base font-semibold leading-7 text-gray-900 ring-1 ring-gray-900/10 hover:ring-gray-900/20"
-                  >
-                    Enter App &rarr;
+                  <Link href="/magic">
+                    <a
+                      rel="noreferrer"
+                      className="inline-block rounded-lg px-4 py-1.5 text-base font-semibold leading-7 text-gray-900 ring-1 ring-gray-900/10 hover:ring-gray-900/20"
+                    >
+                      Enter App &rarr;
+                    </a>
                   </Link>
 
                   <a
                     href="https://rohanphw.notion.site/rohanphw/Tangent-AI-978ec36ea968484a9c5556808ac604e8"
                     target="_blank"
-                    
                     rel="noreferrer"
                     className="inline-block rounded-lg px-4 py-1.5 lg:hidden md:hidden text-base font-semibold leading-7 text-gray-900 ring-1 ring-gray-900/10 hover:ring-gray-900/20"
                   >
@@ -123,7 +126,8 @@ export default function Example() {
                     <div className="flex flex-wrap items-center justify-between">
                       <div className="flex w-0 flex-1 items-center">
                         <p className="ml-3 truncate text-gray-600">
-                          <span className="inline">Powered by Tezos</span>
+                          
+                          <span className="inline">Powered by <a href="https://tezos.com" target="_blank" rel="noreferrer" className="hover:underline">Tezos</a></span>
                         </p>
                       </div>
                     </div>

@@ -6,7 +6,6 @@ import TopBanner from "components/topbanner";
 import { TezosContext } from "context/TezosContext";
 import Header from "components/header";
 
-
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 export default function Home() {
@@ -147,10 +146,12 @@ export default function Home() {
           </defs>
         </svg>
       </div>
-      <Header connect={connectWallet}
-      disconnect={disconnectWallet}
-      address={tzAddres}/>
-      <div className="flex flex-col justify-center items-center p-2 mt-28 lg:mt-16">
+      <Header
+        connect={connectWallet}
+        disconnect={disconnectWallet}
+        address={tzAddres}
+      />
+      <div className="flex flex-col justify-center items-center p-2 mt-28 lg:mt-0">
         <h1 className="text-3xl md:text-6xl lg:text-6xl mt-5 lg:mt-0 p-4 font-bold text-gray-800">
           What&apos;s on your mind ?
         </h1>
@@ -158,7 +159,7 @@ export default function Home() {
           <PromptForm onSubmit={handleSubmit} />
         </div>
       </div>
-      <div className="pt-[10px] p-2">
+      <div className="pt-[2px] p-2">
         {error && <div>{error}</div>}
         <div className="border-hairline max-w-[512px]  lg:p-0 mx-auto relative rounded-3xl">
           <div className="bg-transparent max-h-[455px] lg:max-h-[550px] md:max-h-[455px] w-full flex items-stretch rounded-lg border-gray-600">
@@ -167,12 +168,12 @@ export default function Home() {
               userUploadedImage={userUploadedImage}
               onDraw={setMaskImage}
             />
-
             <div className="flex lg:hidden md:hidden">
               <TopBanner
-              connect={connectWallet}
-              disconnect={disconnectWallet}
-              address={tzAddres} />
+                connect={connectWallet}
+                disconnect={disconnectWallet}
+                address={tzAddres}
+              />
             </div>
             <div className="hidden lg:flex md:flex">
               <Banner
