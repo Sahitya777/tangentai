@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect, useMemo } from "react";
 import Canvas from "components/canvas";
 import PromptForm from "components/prompt-form";
 import Banner from "components/banner";
@@ -7,80 +7,75 @@ import { TezosContext } from "context/TezosContext";
 import Header from "components/header";
 import { NFTStorage, File } from "nft.storage";
 import { mintNFT } from "actions";
+import PredictionOutput from "components/PredictionOutput";
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
 //initialising nft.storage
-const nftAPI = process.env.NFT_API_KEY;
-const client = new NFTStorage({ token: nftAPI });
+// const nftAPI = process.env.NEXT_PUBLIC_NFT_API_KEY;
+// const client = new NFTStorage({ token: nftAPI });
 
 export default function Home() {
   const { wallet, tezos } = useContext(TezosContext);
   const [tzAddres, setTzAddress] = useState("");
 
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [amount, setAmount] = useState("0");
   const [error, setError] = useState(null);
   const [predictions, setPredictions] = useState([]);
-  const [maskImage, setMaskImage] = useState(null);
-  const [userUploadedImage, setUserUploadedImage] = useState(null);
-
-  const mint = (e) => {
-    e.preventDefault();
-    if (
-      name === "" ||
-      description === "" ||
-      // amount === "" ||
-      // !/^-?\d+$/.test(amount) ||
-      filesContent.length === 0
-    ) {
-      alert("Some Error Occurred. Please check entered details.");
-      return;
+  console.log(JSON.stringify(predictions, null, 2));
+  const predictionURL = useMemo(() => {
+    if (predictions.length === 0) return "";
+    else {
+      const last = predictions[predictions.length - 1];
+      if (last.status === "succeeded") {
+        return last.output[last.output.length - 1];
+      } else {
+        return "";
+      }
     }
-    setError("");
+  }, [predictions]);
 
-    (async () => {
-      const metadata = await client.store({
-        name: "TangentAI",
-        description: "Beautifully generated with TangentAI✨",
-        image:
-          "https://replicate.delivery/pbxt/bGJX1KAUeG00By5kuCpaj3z4JeyhBtvCBJPcJN6MDh2wLjGQA/out-0.png",
-      });
-      console.log(metadata);
-      mintNFT({ tezos, metadata: metadata.url });
-      setName("");
-      // setAmount("1");
-      setDescription("");
-    })();
-  };
+  const loadingPrediction = useMemo(() => {
+    return predictions.length
+      ? predictions[predictions.length - 1].status === "processing"
+      : false;
+  }, [predictions]);
 
-  
+  // const mint = (e) => {
+  //   console.log("Minting...");
+  //   console.log(name, description);
+  //   e.preventDefault();
+  //   if (name === "" || description === "") {
+  //     alert("Some Error Occurred. Please check entered details.");
+  //     return;
+  //   }
+  //   setError("");
+
+  //   (async () => {
+  //     const metadata = await client.store({
+  //       name: "TangentAI",
+  //       description: "Beautifully generated with TangentAI✨",
+  //       image:
+  //         "https://replicate.delivery/pbxt/bGJX1KAUeG00By5kuCpaj3z4JeyhBtvCBJPcJN6MDh2wLjGQA/out-0.png",
+  //     });
+  //     console.log(metadata);
+  //     mintNFT({ tezos, metadata: metadata.url });
+  //     setName("");
+  //     // setAmount("1");
+  //     setDescription("");
+  //   })();
+  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const prevPrediction = predictions[predictions.length - 1];
-    //Link to generated art ⬇
-    const prevPredictionOutput = prevPrediction?.output
-      ? prevPrediction.output[prevPrediction.output.length - 1]
-      : null;
-
-    const body = {
-      prompt: e.target.prompt.value,
-      init_image: userUploadedImage
-        ? await readAsDataURL(userUploadedImage)
-        : // only use previous prediction as init image if there's a mask
-        maskImage
-        ? prevPredictionOutput
-        : null,
-      mask: maskImage,
-    };
 
     const response = await fetch("/api/predictions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(body),
+      body: JSON.stringify({
+        prompt: e.target.prompt.value,
+      }),
     });
     const prediction = await response.json();
 
@@ -88,8 +83,8 @@ export default function Home() {
       setError(prediction.detail);
       return;
     }
-    setPredictions(predictions.concat([prediction]));
 
+    setPredictions((preds) => preds.concat([prediction]));
     while (
       prediction.status !== "succeeded" &&
       prediction.status !== "failed"
@@ -101,11 +96,7 @@ export default function Home() {
         setError(prediction.detail);
         return;
       }
-      setPredictions(predictions.concat([prediction]));
-
-      if (prediction.status === "succeeded") {
-        setUserUploadedImage(null);
-      }
+      setPredictions((preds) => preds.concat([prediction]));
     }
   };
 
@@ -130,61 +121,9 @@ export default function Home() {
   return (
     <div className="isolate bg-white font-poppins">
       <title>Tangent</title>
+      <BlurElementTop />
+      <BlurElementBottom />
 
-      <div className="absolute inset-x-0 top-[-10rem] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[-20rem]">
-        <svg
-          className="relative left-[calc(50%-11rem)] -z-10 h-[21.1875rem] max-w-none -translate-x-1/2 rotate-[30deg] sm:left-[calc(50%-30rem)] sm:h-[42.375rem]"
-          viewBox="0 0 1155 678"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            fill="url(#45de2b6b-92d5-4d68-a6a0-9b9b2abad533)"
-            fillOpacity=".3"
-            d="M317.219 518.975L203.852 678 0 438.341l317.219 80.634 204.172-286.402c1.307 132.337 45.083 346.658 209.733 145.248C936.936 126.058 882.053-94.234 1031.02 41.331c119.18 108.451 130.68 295.337 121.53 375.223L855 299l21.173 362.054-558.954-142.079z"
-          />
-          <defs>
-            <linearGradient
-              id="45de2b6b-92d5-4d68-a6a0-9b9b2abad533"
-              x1="1155.49"
-              x2="-78.208"
-              y1=".177"
-              y2="474.645"
-              gradientUnits="userSpaceOnUse"
-            >
-              <stop stopColor="#9089FC" />
-              <stop offset={1} stopColor="#FF80B5" />
-            </linearGradient>
-          </defs>
-        </svg>
-      </div>
-      <div className="absolute inset-x-0 bottom-0 -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]">
-        <svg
-          className="relative left-[calc(50%+3rem)] h-[21.1875rem] max-w-none -translate-x-1/2 sm:left-[calc(50%+36rem)] sm:h-[42.375rem]"
-          viewBox="0 0 1155 678"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            fill="url(#ecb5b0c9-546c-4772-8c71-4d3f06d544bc)"
-            fillOpacity=".3"
-            d="M317.219 518.975L203.852 678 0 438.341l317.219 80.634 204.172-286.402c1.307 132.337 45.083 346.658 209.733 145.248C936.936 126.058 882.053-94.234 1031.02 41.331c119.18 108.451 130.68 295.337 121.53 375.223L855 299l21.173 362.054-558.954-142.079z"
-          />
-          <defs>
-            <linearGradient
-              id="ecb5b0c9-546c-4772-8c71-4d3f06d544bc"
-              x1="1155.49"
-              x2="-78.208"
-              y1=".177"
-              y2="474.645"
-              gradientUnits="userSpaceOnUse"
-            >
-              <stop stopColor="#9089FC" />
-              <stop offset={1} stopColor="#FF80B5" />
-            </linearGradient>
-          </defs>
-        </svg>
-      </div>
       <Header
         connect={connectWallet}
         disconnect={disconnectWallet}
@@ -196,32 +135,31 @@ export default function Home() {
         </h1>
         <div className="flex flex-row mt-2">
           <PromptForm onSubmit={handleSubmit} />
-          <button onClick={(e) => mint(e)}>Mint your art</button>
+          {/* <button onClick={(e) => mint(e)}>Mint your art</button> */}
         </div>
       </div>
       <div className="pt-[2px] p-2">
         {error && <div>{error}</div>}
         <div className="border-hairline max-w-[512px]  lg:p-0 mx-auto relative rounded-3xl">
           <div className="bg-transparent max-h-[455px] lg:max-h-[455px] md:max-h-[455px] w-full flex items-stretch rounded-lg border-gray-600">
-            <Canvas
-              predictions={predictions}
-              userUploadedImage={userUploadedImage}
-              onDraw={setMaskImage}
+            <PredictionOutput
+              imgURL={predictionURL}
+              loading={loadingPrediction}
             />
-            <div className="flex lg:hidden md:hidden">
+            {/* <div className="flex lg:hidden md:hidden">
               <TopBanner
                 connect={connectWallet}
                 disconnect={disconnectWallet}
                 address={tzAddres}
               />
-            </div>
-            <div className="hidden lg:flex md:flex">
+            </div> */}
+            {/* <div className="hidden lg:flex md:flex">
               <Banner
                 connect={connectWallet}
                 disconnect={disconnectWallet}
                 address={tzAddres}
               />
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
@@ -239,3 +177,63 @@ function readAsDataURL(file) {
     fr.readAsDataURL(file);
   });
 }
+
+const BlurElementTop = () => (
+  <div className="absolute inset-x-0 top-[-10rem] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[-20rem]">
+    <svg
+      className="relative left-[calc(50%-11rem)] -z-10 h-[21.1875rem] max-w-none -translate-x-1/2 rotate-[30deg] sm:left-[calc(50%-30rem)] sm:h-[42.375rem]"
+      viewBox="0 0 1155 678"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        fill="url(#45de2b6b-92d5-4d68-a6a0-9b9b2abad533)"
+        fillOpacity=".3"
+        d="M317.219 518.975L203.852 678 0 438.341l317.219 80.634 204.172-286.402c1.307 132.337 45.083 346.658 209.733 145.248C936.936 126.058 882.053-94.234 1031.02 41.331c119.18 108.451 130.68 295.337 121.53 375.223L855 299l21.173 362.054-558.954-142.079z"
+      />
+      <defs>
+        <linearGradient
+          id="45de2b6b-92d5-4d68-a6a0-9b9b2abad533"
+          x1="1155.49"
+          x2="-78.208"
+          y1=".177"
+          y2="474.645"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop stopColor="#9089FC" />
+          <stop offset={1} stopColor="#FF80B5" />
+        </linearGradient>
+      </defs>
+    </svg>
+  </div>
+);
+
+const BlurElementBottom = () => (
+  <div className="absolute inset-x-0 bottom-0 -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]">
+    <svg
+      className="relative left-[calc(50%+3rem)] h-[21.1875rem] max-w-none -translate-x-1/2 sm:left-[calc(50%+36rem)] sm:h-[42.375rem]"
+      viewBox="0 0 1155 678"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        fill="url(#ecb5b0c9-546c-4772-8c71-4d3f06d544bc)"
+        fillOpacity=".3"
+        d="M317.219 518.975L203.852 678 0 438.341l317.219 80.634 204.172-286.402c1.307 132.337 45.083 346.658 209.733 145.248C936.936 126.058 882.053-94.234 1031.02 41.331c119.18 108.451 130.68 295.337 121.53 375.223L855 299l21.173 362.054-558.954-142.079z"
+      />
+      <defs>
+        <linearGradient
+          id="ecb5b0c9-546c-4772-8c71-4d3f06d544bc"
+          x1="1155.49"
+          x2="-78.208"
+          y1=".177"
+          y2="474.645"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop stopColor="#9089FC" />
+          <stop offset={1} stopColor="#FF80B5" />
+        </linearGradient>
+      </defs>
+    </svg>
+  </div>
+);
