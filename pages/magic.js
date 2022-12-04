@@ -12,15 +12,15 @@ export default function Home() {
   const { wallet, tezos } = useContext(TezosContext);
   const [tzAddres, setTzAddress] = useState("");
 
-  const [predictions, setPredictions] = useState([]);
   const [error, setError] = useState(null);
+  const [predictions, setPredictions] = useState([]);
   const [maskImage, setMaskImage] = useState(null);
   const [userUploadedImage, setUserUploadedImage] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const prevPrediction = predictions[predictions.length - 1];
+    //Link to generated art ⬇
     const prevPredictionOutput = prevPrediction?.output
       ? prevPrediction.output[prevPrediction.output.length - 1]
       : null;
@@ -50,6 +50,7 @@ export default function Home() {
       return;
     }
     setPredictions(predictions.concat([prediction]));
+    console.log(prevPredictionOutput);
 
     while (
       prediction.status !== "succeeded" &&
@@ -162,7 +163,7 @@ export default function Home() {
       <div className="pt-[2px] p-2">
         {error && <div>{error}</div>}
         <div className="border-hairline max-w-[512px]  lg:p-0 mx-auto relative rounded-3xl">
-          <div className="bg-transparent max-h-[455px] lg:max-h-[550px] md:max-h-[455px] w-full flex items-stretch rounded-lg border-gray-600">
+          <div className="bg-transparent max-h-[455px] lg:max-h-[455px] md:max-h-[455px] w-full flex items-stretch rounded-lg border-gray-600">
             <Canvas
               predictions={predictions}
               userUploadedImage={userUploadedImage}

@@ -37,7 +37,7 @@ export default class Canvas extends React.Component {
           predictions
             .filter((prediction) => prediction.output)
             .map((prediction, index) => (
-              <div key="index">
+              <div key="index" className="flex flex-col">
                 <Image
                   alt={"prediction" + index}
                   key={"prediction" + index}
@@ -46,7 +46,9 @@ export default class Canvas extends React.Component {
                   style={{ zIndex: index }}
                   src={prediction.lastImage}
                 />
-                
+                <button className="relative max-w-[512px]  items-center justify-center mt-[470px] rounded-md border border-transparent bg-transparent px-4 py-2 text-sm font-medium shadow-sm text-gray-500 ring-1 ring-gray-900/10 hover:ring-gray-900/20">
+                  Mint your art
+                </button>
               </div>
             ))}
 
@@ -62,11 +64,7 @@ export default class Canvas extends React.Component {
         {/* SPINNER */}
         {predicting && (
           <div>
-            <Skeleton
-              rounded={"7px"}
-              height={{ lg: "550px", md: "455px", sm: "455px" }}
-              width="512px"
-            >
+            <Skeleton rounded={"7px"} height="455px" width="512px">
               {lastPrediction.status}
             </Skeleton>
           </div>

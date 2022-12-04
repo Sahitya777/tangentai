@@ -1,4 +1,9 @@
+import { useEffect } from "react";
+
+
 export default function Header({ connect, disconnect, address }) {
+
+ 
   return (
     <div className="hidden lg:flex md:flex justify-end m-4">
       <div className="order-3 mt-0 ml-2 w-auto flex-shrink-0 sm:order-2 sm:mt-0 sm:w-auto">
