@@ -21,7 +21,7 @@ export default class Canvas extends React.Component {
 
   render() {
     const predictions = this.props.predictions.map((prediction) => {
-      console.log("Image Url", prediction.output);
+      
 
       prediction.lastImage = prediction.output
         ? prediction.output[prediction.output.length - 1]
