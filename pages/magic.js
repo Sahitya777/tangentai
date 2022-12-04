@@ -6,23 +6,55 @@ import TopBanner from "components/topbanner";
 import { TezosContext } from "context/TezosContext";
 import Header from "components/header";
 import { NFTStorage, File } from "nft.storage";
-
-
+import { mintNFT } from "actions";
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 //initialising nft.storage
-const nftAPI = process.env.NFT_API_KEY
+const nftAPI = process.env.NFT_API_KEY;
 const client = new NFTStorage({ token: nftAPI });
-
 
 export default function Home() {
   const { wallet, tezos } = useContext(TezosContext);
   const [tzAddres, setTzAddress] = useState("");
 
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [amount, setAmount] = useState("0");
   const [error, setError] = useState(null);
   const [predictions, setPredictions] = useState([]);
   const [maskImage, setMaskImage] = useState(null);
   const [userUploadedImage, setUserUploadedImage] = useState(null);
+
+  const mint = (e) => {
+    e.preventDefault();
+    if (
+      name === "" ||
+      description === "" ||
+      // amount === "" ||
+      // !/^-?\d+$/.test(amount) ||
+      filesContent.length === 0
+    ) {
+      alert("Some Error Occurred. Please check entered details.");
+      return;
+    }
+    setError("");
+
+    (async () => {
+      const metadata = await client.store({
+        name: "TangentAI",
+        description: "Beautifully generated with TangentAI✨",
+        image:
+          "https://replicate.delivery/pbxt/bGJX1KAUeG00By5kuCpaj3z4JeyhBtvCBJPcJN6MDh2wLjGQA/out-0.png",
+      });
+      console.log(metadata);
+      mintNFT({ tezos, metadata: metadata.url });
+      setName("");
+      // setAmount("1");
+      setDescription("");
+    })();
+  };
+
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -57,7 +89,6 @@ export default function Home() {
       return;
     }
     setPredictions(predictions.concat([prediction]));
-    console.log(prevPredictionOutput);
 
     while (
       prediction.status !== "succeeded" &&
@@ -160,11 +191,12 @@ export default function Home() {
         address={tzAddres}
       />
       <div className="flex flex-col justify-center items-center p-2 mt-28 lg:mt-0">
-        <h1 className="text-3xl md:text-6xl lg:text-6xl  lg:mt-0 p-4 font-bold text-gray-800">
+        <h1 className="text-3xl md:text-6xl lg:text-6xl lg:mt-0 p-4 font-bold text-gray-800">
           What&apos;s on your mind ?
         </h1>
-        <div className="mt-2">
+        <div className="flex flex-row mt-2">
           <PromptForm onSubmit={handleSubmit} />
+          <button onClick={(e) => mint(e)}>Mint your art</button>
         </div>
       </div>
       <div className="pt-[2px] p-2">
