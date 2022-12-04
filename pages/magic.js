@@ -40,6 +40,10 @@ export default function Home() {
       : false;
   }, [predictions]);
 
+  const handleMint = (e) => {
+    e.preventDefault();
+  };
+
   // const mint = (e) => {
   //   console.log("Minting...");
   //   console.log(name, description);
@@ -141,11 +145,12 @@ export default function Home() {
       <div className="pt-[2px] p-2">
         {error && <div>{error}</div>}
         <div className="border-hairline max-w-[512px]  lg:p-0 mx-auto relative rounded-3xl">
-          <div className="bg-transparent max-h-[455px] lg:max-h-[455px] md:max-h-[455px] w-full flex items-stretch rounded-lg border-gray-600">
+          <div className="bg-transparent max-h-[512px] lg:max-h-[512px] md:max-h-[512px] w-full flex flex-col items-stretch rounded-lg border-gray-600">
             <PredictionOutput
               imgURL={predictionURL}
               loading={loadingPrediction}
             />
+
             {/* <div className="flex lg:hidden md:hidden">
               <TopBanner
                 connect={connectWallet}
@@ -161,21 +166,18 @@ export default function Home() {
               />
             </div> */}
           </div>
+          {predictionURL && (
+            <button
+              className="mt-4 flex items-center justify-center rounded-md border border-transparent bg-transparent px-4 py-2 text-sm font-medium shadow-sm bg-pink-800 text-gray-50 ring-1 ring-gray-900/10 hover:ring-gray-900/20 w-full"
+              onClick={handleMint}
+            >
+              Mint NFT - 2 TEZ
+            </button>
+          )}
         </div>
       </div>
     </div>
   );
-}
-
-function readAsDataURL(file) {
-  return new Promise((resolve, reject) => {
-    const fr = new FileReader();
-    fr.onerror = reject;
-    fr.onload = () => {
-      resolve(fr.result);
-    };
-    fr.readAsDataURL(file);
-  });
 }
 
 const BlurElementTop = () => (
