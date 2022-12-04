@@ -6,7 +6,6 @@ import TopBanner from "components/topbanner";
 import { TezosContext } from "context/TezosContext";
 import Header from "components/header";
 import { NFTStorage, File } from "nft.storage";
-import { mintNFT } from "actions";
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 //initialising nft.storage
@@ -17,42 +16,12 @@ export default function Home() {
   const { wallet, tezos } = useContext(TezosContext);
   const [tzAddres, setTzAddress] = useState("");
 
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [amount, setAmount] = useState("0");
   const [error, setError] = useState(null);
   const [predictions, setPredictions] = useState([]);
   const [maskImage, setMaskImage] = useState(null);
   const [userUploadedImage, setUserUploadedImage] = useState(null);
 
-  const mint = (e) => {
-    e.preventDefault();
-    if (
-      name === "" ||
-      description === "" ||
-      // amount === "" ||
-      // !/^-?\d+$/.test(amount) ||
-      filesContent.length === 0
-    ) {
-      alert("Some Error Occurred. Please check entered details.");
-      return;
-    }
-    setError("");
 
-    (async () => {
-      const metadata = await client.store({
-        name: "TangentAI",
-        description: "Beautifully generated with TangentAI✨",
-        image:
-          "https://replicate.delivery/pbxt/bGJX1KAUeG00By5kuCpaj3z4JeyhBtvCBJPcJN6MDh2wLjGQA/out-0.png",
-      });
-      console.log(metadata);
-      mintNFT({ tezos, metadata: metadata.url });
-      setName("");
-      // setAmount("1");
-      setDescription("");
-    })();
-  };
 
   
 
@@ -196,7 +165,7 @@ export default function Home() {
         </h1>
         <div className="flex flex-row mt-2">
           <PromptForm onSubmit={handleSubmit} />
-          <button onClick={(e) => mint(e)}>Mint your art</button>
+          {/* <button onClick={(e) => mint(e)}>Mint your art</button> */}
         </div>
       </div>
       <div className="pt-[2px] p-2">
