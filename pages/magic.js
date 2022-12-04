@@ -5,23 +5,24 @@ import Banner from "components/banner";
 import TopBanner from "components/topbanner";
 import { TezosContext } from "context/TezosContext";
 import Header from "components/header";
-import { NFTStorage, File } from "nft.storage";
+import { NFTStorage, Token } from "nft.storage";
 import { mintNFT } from "actions";
 import PredictionOutput from "components/PredictionOutput";
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-//initialising nft.storage
-// const nftAPI = process.env.NEXT_PUBLIC_NFT_API_KEY;
-// const client = new NFTStorage({ token: nftAPI });
+// initialising nft.storage
+const nftAPI = process.env.NEXT_PUBLIC_NFT_API_KEY;
+const client = new NFTStorage({ token: nftAPI });
 
 export default function Home() {
   const { wallet, tezos } = useContext(TezosContext);
   const [tzAddres, setTzAddress] = useState("");
 
+  const [prompt, setPrompt] = useState("");
   const [error, setError] = useState(null);
   const [predictions, setPredictions] = useState([]);
-  console.log(JSON.stringify(predictions, null, 2));
+
   const predictionURL = useMemo(() => {
     if (predictions.length === 0) return "";
     else {
@@ -40,34 +41,45 @@ export default function Home() {
       : false;
   }, [predictions]);
 
-  const handleMint = (e) => {
+  const handleMint = async (e) => {
     e.preventDefault();
+
+    // const img = await fetch(predictionURL);
+    // const imgBlob = await img.blob();
+
+    const { token, car } = await Token.Token.encode({
+      decimals: 0,
+      isBooleanAmount: true,
+      name: "Tangent NFT",
+      description: `NFT generated from ${prompt}`,
+      minter: tzAddres,
+      creators: ["Tangent Creators"],
+      date: new Date(),
+      type: "Tangent",
+      tags: ["Tangent", "AI NFT", "Generative NFT"],
+      ttl: 600,
+      language: "en",
+      artifactUri: predictionURL,
+      displayUri: predictionURL,
+      thumbnailUri: predictionURL,
+      externalUri: "https://tangentai.xyz",
+      attributes: [
+        {
+          name: "prompt",
+          value: prompt,
+        },
+      ],
+    });
+
+    const metadata = await client.storeCar(car);
+    console.log("metadata", metadata);
+    console.log("token", token);
+
+    mintNFT({
+      tezos,
+      metadata: `https://gateway.ipfs.io/ipfs/${metadata}/metadata.json`,
+    });
   };
-
-  // const mint = (e) => {
-  //   console.log("Minting...");
-  //   console.log(name, description);
-  //   e.preventDefault();
-  //   if (name === "" || description === "") {
-  //     alert("Some Error Occurred. Please check entered details.");
-  //     return;
-  //   }
-  //   setError("");
-
-  //   (async () => {
-  //     const metadata = await client.store({
-  //       name: "TangentAI",
-  //       description: "Beautifully generated with TangentAI✨",
-  //       image:
-  //         "https://replicate.delivery/pbxt/bGJX1KAUeG00By5kuCpaj3z4JeyhBtvCBJPcJN6MDh2wLjGQA/out-0.png",
-  //     });
-  //     console.log(metadata);
-  //     mintNFT({ tezos, metadata: metadata.url });
-  //     setName("");
-  //     // setAmount("1");
-  //     setDescription("");
-  //   })();
-  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -78,7 +90,7 @@ export default function Home() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        prompt: e.target.prompt.value,
+        prompt: prompt,
       }),
     });
     const prediction = await response.json();
@@ -110,7 +122,11 @@ export default function Home() {
     const active = await wallet.client.getActiveAccount();
     if (active) walletAddress = active;
     else {
-      const permissions = await wallet.client.requestPermissions();
+      const permissions = await wallet.client.requestPermissions({
+        network: {
+          type: "ghostnet",
+        },
+      });
       walletAddress = permissions.address;
     }
 
@@ -138,7 +154,11 @@ export default function Home() {
           What&apos;s on your mind ?
         </h1>
         <div className="flex flex-row mt-2">
-          <PromptForm onSubmit={handleSubmit} />
+          <PromptForm
+            handleSubmit={handleSubmit}
+            prompt={prompt}
+            setPrompt={setPrompt}
+          />
           {/* <button onClick={(e) => mint(e)}>Mint your art</button> */}
         </div>
       </div>
