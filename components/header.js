@@ -19,7 +19,7 @@ export default function Header({ connect, disconnect, address }) {
             onClick={() => disconnect()}
             className="flex items-center justify-center rounded-md border border-transparent bg-transparent px-4 py-2 text-sm font-medium shadow-sm text-gray-500 ring-1 ring-gray-900/10 hover:ring-gray-900/20"
           >
-            {`${address?.slice(0, 6)}...`+`${address?.slice(-6)}`}
+            {"Disconnect Wallet"}
           </button>
         )}
       </div>

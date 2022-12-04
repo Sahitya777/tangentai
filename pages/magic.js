@@ -14,6 +14,7 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const nftAPI = process.env.NFT_API_KEY
 const client = new NFTStorage({ token: nftAPI });
 
+
 export default function Home() {
   const { wallet, tezos } = useContext(TezosContext);
   const [tzAddres, setTzAddress] = useState("");
@@ -159,7 +160,7 @@ export default function Home() {
         address={tzAddres}
       />
       <div className="flex flex-col justify-center items-center p-2 mt-28 lg:mt-0">
-        <h1 className="text-3xl md:text-6xl lg:text-6xl mt-5 lg:mt-0 p-4 font-bold text-gray-800">
+        <h1 className="text-3xl md:text-6xl lg:text-6xl  lg:mt-0 p-4 font-bold text-gray-800">
           What&apos;s on your mind ?
         </h1>
         <div className="mt-2">

@@ -1,6 +1,32 @@
 import React from "react";
 import Image from "next/image";
 import { Skeleton } from "@chakra-ui/react";
+import { mintNFT } from "actions";
+
+//mint
+const onSubmit = (e) => {
+  e.preventDefault();
+  if (name === "" || description === "" || filesContent.length === 0) {
+    setError("Some Error Occurred. Please check again.");
+    return;
+  }
+  setLoading(true);
+  setError("");
+
+  (async () => {
+    const metadata = await client.store({
+      name: TangentAI, //add the tokenID too
+      description: "Beautifullu generated with TangentAI ✨",
+      image: prediction.output,
+    });
+    console.log(metadata);
+    dispatch(mintNFT({ tezos, amount, metadata: metadata.url }));
+
+    setLoading(false);
+    setName("");
+    setDescription("");
+  })();
+};
 export default class Canvas extends React.Component {
   constructor(props) {
     super(props);
@@ -20,6 +46,8 @@ export default class Canvas extends React.Component {
 
   render() {
     const predictions = this.props.predictions.map((prediction) => {
+      console.log("Image Url", prediction.output);
+
       prediction.lastImage = prediction.output
         ? prediction.output[prediction.output.length - 1]
         : null;
@@ -46,7 +74,10 @@ export default class Canvas extends React.Component {
                   style={{ zIndex: index }}
                   src={prediction.lastImage}
                 />
-                <button className="relative max-w-[512px]  items-center justify-center mt-[470px] rounded-md border border-transparent bg-transparent px-4 py-2 text-sm font-medium shadow-sm text-gray-500 ring-1 ring-gray-900/10 hover:ring-gray-900/20">
+                <button
+                  onClick={onSubmit}
+                  className="relative max-w-[512px] items-center justify-center mt-[470px] rounded-md border border-transparent bg-transparent px-4 py-2 text-sm font-medium shadow-sm text-gray-500 ring-1 ring-gray-900/10 hover:ring-gray-900/20"
+                >
                   Mint your art
                 </button>
               </div>
