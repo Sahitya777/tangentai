@@ -5,8 +5,14 @@ import Banner from "components/banner";
 import TopBanner from "components/topbanner";
 import { TezosContext } from "context/TezosContext";
 import Header from "components/header";
+import { NFTStorage, File } from "nft.storage";
+
+
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+//initialising nft.storage
+const nftAPI = process.env.NFT_API_KEY
+const client = new NFTStorage({ token: nftAPI });
 
 export default function Home() {
   const { wallet, tezos } = useContext(TezosContext);
