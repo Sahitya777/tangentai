@@ -60,7 +60,7 @@ export default function Home() {
     else {
       const permissions = await wallet.client.requestPermissions({
         network: {
-          type: "ghostnet",
+          type: "mainnet",
         },
       });
       walletAddress = permissions.address;
