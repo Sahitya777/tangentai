@@ -15,7 +15,7 @@ const PredictionOutput = ({ imgURL, loading }) => {
       {/* SPINNER */}
       {loading && (
         <div>
-          <div className="flex justify-center pt-48">
+          <div className="flex justify-center pt-52">
             <Spinner />
           </div>
           <h1 className="text-center mt-6 mx-2 text-lg font-bold">
