@@ -23,63 +23,63 @@ export default function Home() {
   const [error, setError] = useState(null);
   const [predictions, setPredictions] = useState([]);
 
-  const predictionURL = useMemo(() => {
-    if (predictions.length === 0) return "";
-    else {
-      const last = predictions[predictions.length - 1];
-      if (last.status === "succeeded") {
-        return last.output[last.output.length - 1];
-      } else {
-        return "";
-      }
-    }
-  }, [predictions]);
+  // const predictionURL = useMemo(() => {
+  //   if (predictions.length === 0) return "";
+  //   else {
+  //     const last = predictions[predictions.length - 1];
+  //     if (last.status === "succeeded") {
+  //       return last.output[last.output.length - 1];
+  //     } else {
+  //       return "";
+  //     }
+  //   }
+  // }, [predictions]);
 
-  const loadingPrediction = useMemo(() => {
-    return predictions.length
-      ? predictions[predictions.length - 1].status === "processing"
-      : false;
-  }, [predictions]);
+  // const loadingPrediction = useMemo(() => {
+  //   return predictions.length
+  //     ? predictions[predictions.length - 1].status === "processing"
+  //     : false;
+  // }, [predictions]);
 
-  const handleMint = async (e) => {
-    e.preventDefault();
+  // const handleMint = async (e) => {
+  //   e.preventDefault();
 
-    // const img = await fetch(predictionURL);
-    // const imgBlob = await img.blob();
+  //   // const img = await fetch(predictionURL);
+  //   // const imgBlob = await img.blob();
 
-    const { token, car } = await Token.Token.encode({
-      decimals: 0,
-      isBooleanAmount: true,
-      name: "Tangent NFT",
-      description: `NFT generated from ${prompt}`,
-      minter: tzAddres,
-      creators: ["Tangent Creators"],
-      date: new Date(),
-      type: "Tangent",
-      tags: ["Tangent", "AI NFT", "Generative NFT"],
-      ttl: 600,
-      language: "en",
-      artifactUri: predictionURL,
-      displayUri: predictionURL,
-      thumbnailUri: predictionURL,
-      externalUri: "https://tangentai.xyz",
-      attributes: [
-        {
-          name: "prompt",
-          value: prompt,
-        },
-      ],
-    });
+  //   const { token, car } = await Token.Token.encode({
+  //     decimals: 0,
+  //     isBooleanAmount: true,
+  //     name: "Tangent NFT",
+  //     description: `NFT generated from ${prompt}`,
+  //     minter: tzAddres,
+  //     creators: ["Tangent Creators"],
+  //     date: new Date(),
+  //     type: "Tangent",
+  //     tags: ["Tangent", "AI NFT", "Generative NFT"],
+  //     ttl: 600,
+  //     language: "en",
+  //     artifactUri: predictionURL,
+  //     displayUri: predictionURL,
+  //     thumbnailUri: predictionURL,
+  //     externalUri: "https://tangentai.xyz",
+  //     attributes: [
+  //       {
+  //         name: "prompt",
+  //         value: prompt,
+  //       },
+  //     ],
+  //   });
 
-    const metadata = await client.storeCar(car);
-    console.log("metadata", metadata);
-    console.log("token", token);
+  //   const metadata = await client.storeCar(car);
+  //   console.log("metadata", metadata);
+  //   console.log("token", token);
 
-    mintNFT({
-      tezos,
-      metadata: `https://gateway.ipfs.io/ipfs/${metadata}/metadata.json`,
-    });
-  };
+  //   mintNFT({
+  //     tezos,
+  //     metadata: `https://gateway.ipfs.io/ipfs/${metadata}/metadata.json`,
+  //   });
+  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -110,6 +110,7 @@ export default function Home() {
       prediction = await response.json();
       if (response.status !== 200) {
         setError(prediction.detail);
+        console.log("error", prediction.detail);
         return;
       }
       setPredictions((preds) => preds.concat([prediction]));
@@ -149,8 +150,8 @@ export default function Home() {
         disconnect={disconnectWallet}
         address={tzAddres}
       />
-      <div className="flex flex-col justify-center items-center p-2 mt-28 lg:mt-0">
-        <h1 className="text-3xl md:text-6xl lg:text-6xl lg:mt-0 p-4 font-bold text-gray-800">
+      <div className="flex flex-col justify-center items-center p-2 mt-28 lg:mt-52">
+        <h1 className="text-3xl md:text-6xl lg:text-7xl lg:mt-0 p-4 font-bold text-gray-800">
           What&apos;s on your mind ?
         </h1>
         <div className="flex flex-row mt-2">
@@ -159,41 +160,27 @@ export default function Home() {
             prompt={prompt}
             setPrompt={setPrompt}
           />
-          {/* <button onClick={(e) => mint(e)}>Mint your art</button> */}
         </div>
       </div>
       <div className="pt-[2px] p-2">
         {error && <div>{error}</div>}
         <div className="border-hairline max-w-[512px]  lg:p-0 mx-auto relative rounded-3xl">
           <div className="bg-transparent max-h-[512px] lg:max-h-[512px] md:max-h-[512px] w-full flex flex-col items-stretch rounded-lg border-gray-600">
-            <PredictionOutput
-              imgURL={predictionURL}
-              loading={loadingPrediction}
-            />
-
-            {/* <div className="flex lg:hidden md:hidden">
+            <div className="flex lg:hidden md:hidden">
               <TopBanner
                 connect={connectWallet}
                 disconnect={disconnectWallet}
                 address={tzAddres}
               />
-            </div> */}
-            {/* <div className="hidden lg:flex md:flex">
+            </div>
+            <div className="hidden lg:flex md:flex">
               <Banner
                 connect={connectWallet}
                 disconnect={disconnectWallet}
                 address={tzAddres}
               />
-            </div> */}
+            </div>
           </div>
-          {predictionURL && (
-            <button
-              className="mt-4 flex items-center justify-center rounded-md border border-transparent bg-transparent px-4 py-2 text-sm font-medium shadow-sm bg-pink-800 text-gray-50 ring-1 ring-gray-900/10 hover:ring-gray-900/20 w-full"
-              onClick={handleMint}
-            >
-              Mint NFT - 2 TEZ
-            </button>
-          )}
         </div>
       </div>
     </div>

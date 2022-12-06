@@ -1,33 +1,26 @@
 import React from "react";
 import Image from "next/image";
-import { Skeleton } from "@chakra-ui/react";
-
+import Spinner from "./spinner";
 const PredictionOutput = ({ imgURL, loading }) => {
   return (
-    <div className="relative w-full aspect-square">
+    <div className="relative w-full aspect-square ">
       {imgURL && (
         <Image
-          // alt={"prediction" + index}
-          // key={"prediction" + index}
+          alt={"Prediction"}
           layout="fill"
-          className="absolute animate-in fade-in rounded-lg"
-          // style={{ zIndex: index }}
+          className="absolute animate-in fade-in rounded-lg "
           src={imgURL}
         />
       )}
       {/* SPINNER */}
       {loading && (
         <div>
-          <Skeleton rounded={"7px"} height="455px" width="512px"></Skeleton>
+          <div className="flex justify-center pt-48">
+            <Spinner />
+          </div>
+          <h1 className="text-center mt-4 text-md">Generating your Art 🚀</h1>
         </div>
       )}
-      {/* {(predictions.length > 0 || this.props.userUploadedImage) &&
-        !predicting && (
-          <div
-            className="absolute top-0 left-0 w-full h-full"
-            style={{ zIndex: predictions.length + 100 }}
-          ></div>
-        )} */}
     </div>
   );
 };
