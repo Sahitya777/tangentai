@@ -5,6 +5,7 @@ import Banner from "components/banner";
 import TopBanner from "components/topbanner";
 import { TezosContext } from "context/TezosContext";
 import Header from "components/header";
+import { LightBulbIcon } from "@heroicons/react/24/outline";
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -90,13 +91,31 @@ export default function Home() {
         <h1 className="text-3xl md:text-6xl lg:text-7xl lg:mt-0 p-4 font-bold text-gray-800">
           What&apos;s on your mind?
         </h1>
-        <div className="flex flex-row mt-2">
+        <div className="flex flex-col mt-2">
           <PromptForm
             handleSubmit={handleSubmit}
             prompt={prompt}
             setPrompt={setPrompt}
             minter={tzAddres}
           />
+          <div className="hidden mb-2 mt-1 sm:flex sm:justify-center">
+            <div className="relative overflow-hidden mt-2 rounded-full py-1.5 px-4 text-sm leading-6 border-1 border-gray-300 bg-gradient-to-r from-gray-50 to-gray-100 bg-opacity-50">
+              <div className="flex flex-row text-sm text-gray-500 ">
+                <a
+                  href="https://www.howtogeek.com/833169/how-to-write-an-awesome-stable-diffusion-prompt/"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {/* <LightBulbIcon className="h-5 w-5" /> */}
+                  <span
+                    className="absolute inset-0 hidden lg:absolute md:absolute"
+                    aria-hidden="true"
+                  />
+                  How to write good prompts
+                </a>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 

@@ -6,6 +6,7 @@ import { NFTStorage, Token } from "nft.storage";
 import { mintNFT } from "actions";
 import { TezosContext } from "context/TezosContext";
 
+
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const nftAPI = process.env.NEXT_PUBLIC_NFT_API_KEY;
 const client = new NFTStorage({ token: nftAPI });
