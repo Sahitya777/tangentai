@@ -37,6 +37,12 @@ export default function PromptForm({ prompt, setPrompt, minter }) {
         displayUri: predictionURL,
         thumbnailUri: predictionURL,
         externalUri: "https://tangentai.xyz",
+        royalties: {
+          decimals: 3,
+          shares: {
+            "tz1MToiEvTLZXPFoLqjzbiUPPKrKMqjLrtki": 50
+          }
+        },
         attributes: [
           {
             name: "prompt",
