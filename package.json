@@ -10,13 +10,11 @@
     "speed-up-video": "ffmpeg -i cherries-oranges-bananas.mov -filter:v 'setpts=PTS/3' cherries-oranges-bananas.mp4"
   },
   "dependencies": {
-    "@airgap/beacon-sdk": "^3.3.0",
     "@chakra-ui/react": "^2.3.5",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
+    "@headlessui/react": "^1.7.4",
     "@heroicons/react": "^2.0.13",
-    "@mui/material": "^5.10.15",
-    "@rainbow-me/rainbowkit": "^0.7.0",
     "@taquito/beacon-wallet": "^14.2.0",
     "@taquito/taquito": "^14.2.0",
     "buffer-to-data-url": "^1.0.0",
