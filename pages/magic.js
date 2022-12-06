@@ -10,9 +10,8 @@ import { mintNFT } from "actions";
 import PredictionOutput from "components/PredictionOutput";
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-
-// initialising nft.storage
-const nftAPI = process.env.NEXT_PUBLIC_NFT_API_KEY;
+//initialising nft.storage
+const nftAPI = process.env.NFT_API_KEY;
 const client = new NFTStorage({ token: nftAPI });
 
 export default function Home() {
@@ -22,30 +21,22 @@ export default function Home() {
   const [prompt, setPrompt] = useState("");
   const [error, setError] = useState(null);
   const [predictions, setPredictions] = useState([]);
+  const [maskImage, setMaskImage] = useState(null);
+  const [userUploadedImage, setUserUploadedImage] = useState(null);
 
-  // const predictionURL = useMemo(() => {
-  //   if (predictions.length === 0) return "";
-  //   else {
-  //     const last = predictions[predictions.length - 1];
-  //     if (last.status === "succeeded") {
-  //       return last.output[last.output.length - 1];
-  //     } else {
-  //       return "";
-  //     }
-  //   }
-  // }, [predictions]);
-
-  // const loadingPrediction = useMemo(() => {
-  //   return predictions.length
-  //     ? predictions[predictions.length - 1].status === "processing"
-  //     : false;
-  // }, [predictions]);
-
-  // const handleMint = async (e) => {
-  //   e.preventDefault();
-
-  //   // const img = await fetch(predictionURL);
-  //   // const imgBlob = await img.blob();
+  const mint = (e) => {
+    e.preventDefault();
+    if (
+      name === "" ||
+      description === "" ||
+      // amount === "" ||
+      // !/^-?\d+$/.test(amount) ||
+      filesContent.length === 0
+    ) {
+      alert("Some Error Occurred. Please check entered details.");
+      return;
+    }
+    setError("");
 
   //   const { token, car } = await Token.Token.encode({
   //     decimals: 0,
@@ -71,15 +62,7 @@ export default function Home() {
   //     ],
   //   });
 
-  //   const metadata = await client.storeCar(car);
-  //   console.log("metadata", metadata);
-  //   console.log("token", token);
-
-  //   mintNFT({
-  //     tezos,
-  //     metadata: `https://gateway.ipfs.io/ipfs/${metadata}/metadata.json`,
-  //   });
-  // };
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
