@@ -28,7 +28,7 @@ export default function PromptForm({ prompt, setPrompt, minter }) {
         description: `NFT generated from ${prompt}`,
         minter: minter,
         creators: ["Tangent Creators"],
-        date: new Date().toString(),
+        date: new Date().toUTCString(),
         type: "Tangent",
         tags: ["Tangent", "AI NFT", "Generative NFT"],
         ttl: 600,
