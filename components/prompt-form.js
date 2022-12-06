@@ -3,54 +3,60 @@ import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import PredictionOutput from "./PredictionOutput";
 import { NFTStorage, Token } from "nft.storage";
-// import { mintNFT } from "actions";
+import { mintNFT } from "actions";
 import { TezosContext } from "context/TezosContext";
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const nftAPI = process.env.NEXT_PUBLIC_NFT_API_KEY;
 const client = new NFTStorage({ token: nftAPI });
 
-export default function PromptForm({ prompt, setPrompt }) {
+export default function PromptForm({ prompt, setPrompt, minter }) {
   const [predictions, setPredictions] = useState([]);
-  const [tzAddres, setTzAddress] = useState("");
-  const { wallet, tezos } = useContext(TezosContext);
+  const { tezos } = useContext(TezosContext);
   const [error, setError] = useState(null);
+
+  const [isMinting, setIsMinting] = useState(false);
 
   const handleMint = async (e) => {
     e.preventDefault();
+    setIsMinting(true);
+    try {
+      const { token, car } = await Token.Token.encode({
+        decimals: 0,
+        isBooleanAmount: true,
+        name: "Tangent NFT",
+        description: `NFT generated from ${prompt}`,
+        minter: minter,
+        creators: ["Tangent Creators"],
+        date: new Date(),
+        type: "Tangent",
+        tags: ["Tangent", "AI NFT", "Generative NFT"],
+        ttl: 600,
+        language: "en",
+        artifactUri: predictionURL,
+        displayUri: predictionURL,
+        thumbnailUri: predictionURL,
+        externalUri: "https://tangentai.xyz",
+        attributes: [
+          {
+            name: "prompt",
+            value: prompt,
+          },
+        ],
+      });
 
-    const { token, car } = await Token.Token.encode({
-      decimals: 0,
-      isBooleanAmount: true,
-      name: "Tangent NFT",
-      description: `NFT generated from ${prompt}`,
-      minter: tzAddres,
-      creators: ["Tangent Creators"],
-      date: new Date(),
-      type: "Tangent",
-      tags: ["Tangent", "AI NFT", "Generative NFT"],
-      ttl: 600,
-      language: "en",
-      artifactUri: predictionURL,
-      displayUri: predictionURL,
-      thumbnailUri: predictionURL,
-      externalUri: "https://tangentai.xyz",
-      attributes: [
-        {
-          name: "prompt",
-          value: prompt,
-        },
-      ],
-    });
+      const metadata = await client.storeCar(car);
+      console.log("metadata", metadata);
+      console.log("token", token);
 
-    const metadata = await client.storeCar(car);
-    console.log("metadata", metadata);
-    console.log("token", token);
-
-    mintNFT({
-      tezos,
-      metadata: `https://gateway.ipfs.io/ipfs/${metadata}/metadata.json`,
-    });
+      await mintNFT({
+        tezos,
+        metadata: `https://gateway.ipfs.io/ipfs/${metadata}/metadata.json`,
+      });
+      setIsMinting(false);
+    } catch {
+      console.log("ERROR.");
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -143,22 +149,29 @@ export default function PromptForm({ prompt, setPrompt }) {
                         className="h-[20px]"
                       />
                     </div>
-                    <div className="flex flex-row h-[600px]">
+                    <div className="flex flex-col  md:flex-row h-[600px]">
                       <PredictionOutput
                         imgURL={predictionURL}
                         loading={loadingPrediction}
                       />
 
                       {predictionURL && (
-                        <div className="flex flex-col m-4 ml-8">
+                        <div className="flex flex-col m-4 ml-8 max-w-xs">
                           <text className="text-2xl italic font-serif font-extralight ">
                             &quot;{prompt}&quot;
                           </text>
                           <button
-                            className="mt-8 flex items-center justify-center rounded-md border border-transparent bg-transparent px-4 py-2 text-sm font-medium shadow-sm bg-pink-800 hover:bg-pink-900 text-gray-50 ring-1 ring-gray-900/10 hover:ring-gray-900/20 w-full"
+                            className="mt-8 flex items-center justify-center rounded-md border-2 border-cyan-700 bg-cyan-700 px-4 py-2 font-bold shadow-lg text-gray-50"
                             onClick={handleMint}
+                            disabled={isMinting}
                           >
-                            Mint NFT 
+                            {isMinting ? "Minting..." : "Mint NFT"}
+                          </button>
+                          <button
+                            className="text-cyan-800 mt-3 flex items-center justify-center rounded-md border-2 border-cyan-700 px-4 py-2 font-bold shadow-sm text-sm"
+                            onClick={() => setOpen(false)}
+                          >
+                            Generate More
                           </button>
                         </div>
                       )}
@@ -184,7 +197,9 @@ export default function PromptForm({ prompt, setPrompt }) {
           />
           <button
             type="submit"
-            onClick={() => setOpen(true)}
+            onClick={() => {
+              setOpen(true);
+            }}
             className="relative overflow-hidden rounded-full py-1.5 px-4 text-sm leading-6 ring-1 ring-gray-900/10 hover:ring-gray-900/20 m-2 shadow-sm"
           >
             Generate

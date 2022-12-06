@@ -150,18 +150,21 @@ export default function Home() {
         disconnect={disconnectWallet}
         address={tzAddres}
       />
+
       <div className="flex flex-col justify-center items-center p-2 mt-28 lg:mt-52">
         <h1 className="text-3xl md:text-6xl lg:text-7xl lg:mt-0 p-4 font-bold text-gray-800">
-          What&apos;s on your mind ?
+          What&apos;s on your mind?
         </h1>
         <div className="flex flex-row mt-2">
           <PromptForm
             handleSubmit={handleSubmit}
             prompt={prompt}
             setPrompt={setPrompt}
+            minter={tzAddres}
           />
         </div>
       </div>
+
       <div className="pt-[2px] p-2">
         {error && <div>{error}</div>}
         <div className="border-hairline max-w-[512px]  lg:p-0 mx-auto relative rounded-3xl">
