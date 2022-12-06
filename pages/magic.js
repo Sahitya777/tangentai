@@ -5,14 +5,8 @@ import Banner from "components/banner";
 import TopBanner from "components/topbanner";
 import { TezosContext } from "context/TezosContext";
 import Header from "components/header";
-import { NFTStorage, Token } from "nft.storage";
-import { mintNFT } from "actions";
-import PredictionOutput from "components/PredictionOutput";
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-//initialising nft.storage
-const nftAPI = process.env.NFT_API_KEY;
-const client = new NFTStorage({ token: nftAPI });
 
 export default function Home() {
   const { wallet, tezos } = useContext(TezosContext);
@@ -21,48 +15,6 @@ export default function Home() {
   const [prompt, setPrompt] = useState("");
   const [error, setError] = useState(null);
   const [predictions, setPredictions] = useState([]);
-  const [maskImage, setMaskImage] = useState(null);
-  const [userUploadedImage, setUserUploadedImage] = useState(null);
-
-  const mint = (e) => {
-    e.preventDefault();
-    if (
-      name === "" ||
-      description === "" ||
-      // amount === "" ||
-      // !/^-?\d+$/.test(amount) ||
-      filesContent.length === 0
-    ) {
-      alert("Some Error Occurred. Please check entered details.");
-      return;
-    }
-    setError("");
-
-  //   const { token, car } = await Token.Token.encode({
-  //     decimals: 0,
-  //     isBooleanAmount: true,
-  //     name: "Tangent NFT",
-  //     description: `NFT generated from ${prompt}`,
-  //     minter: tzAddres,
-  //     creators: ["Tangent Creators"],
-  //     date: new Date(),
-  //     type: "Tangent",
-  //     tags: ["Tangent", "AI NFT", "Generative NFT"],
-  //     ttl: 600,
-  //     language: "en",
-  //     artifactUri: predictionURL,
-  //     displayUri: predictionURL,
-  //     thumbnailUri: predictionURL,
-  //     externalUri: "https://tangentai.xyz",
-  //     attributes: [
-  //       {
-  //         name: "prompt",
-  //         value: prompt,
-  //       },
-  //     ],
-  //   });
-
-  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
