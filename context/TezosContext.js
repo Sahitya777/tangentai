@@ -7,9 +7,9 @@ let wallet, tezos;
 if (typeof window !== "undefined") {
   wallet = new BeaconWallet({
     name: "TangentAI",
-    preferredNetwork: "ghostnet",
+    preferredNetwork: "mainnet",
   });
-  tezos = new TezosToolkit(config.GHOSTNET_RPC);
+  tezos = new TezosToolkit(config.MAINNET_RPC);
   tezos.setProvider({ wallet });
 }
 
