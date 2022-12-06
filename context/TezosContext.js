@@ -4,7 +4,7 @@ import { TezosToolkit } from "@taquito/taquito";
 import config from "./config";
 
 let wallet, tezos;
-if (typeof window != undefined) {
+if (typeof window !== "undefined") {
   wallet = new BeaconWallet({
     name: "TangentAI",
     preferredNetwork: "ghostnet",
