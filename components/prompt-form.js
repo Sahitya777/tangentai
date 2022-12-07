@@ -23,6 +23,7 @@ export default function PromptForm({
   const [error, setError] = useState(null);
 
   const [isMinting, setIsMinting] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false);
 
   const handleMint = async (e) => {
     e.preventDefault();
@@ -74,6 +75,7 @@ export default function PromptForm({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsGenerating(true);
 
     const response = await fetch("/api/predictions", {
       method: "POST",
@@ -105,6 +107,7 @@ export default function PromptForm({
         return;
       }
       setPredictions((preds) => preds.concat([prediction]));
+      setIsGenerating(false);
     }
   };
 
@@ -165,7 +168,7 @@ export default function PromptForm({
                     <div className="flex flex-col  md:flex-row h-[600px]">
                       <PredictionOutput
                         imgURL={predictionURL}
-                        loading={loadingPrediction}
+                        loading={isGenerating || loadingPrediction}
                       />
 
                       {predictionURL && (
