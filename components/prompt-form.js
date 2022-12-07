@@ -6,12 +6,18 @@ import { NFTStorage, Token } from "nft.storage";
 import { mintNFT } from "actions";
 import { TezosContext } from "context/TezosContext";
 
-
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const nftAPI = process.env.NEXT_PUBLIC_NFT_API_KEY;
 const client = new NFTStorage({ token: nftAPI });
 
-export default function PromptForm({ prompt, setPrompt, minter }) {
+export default function PromptForm({
+  prompt,
+  setPrompt,
+  minter,
+  connect,
+  disconnect,
+  address,
+}) {
   const [predictions, setPredictions] = useState([]);
   const { tezos } = useContext(TezosContext);
   const [error, setError] = useState(null);
@@ -41,8 +47,8 @@ export default function PromptForm({ prompt, setPrompt, minter }) {
         royalties: {
           decimals: 3,
           shares: {
-            "tz1MToiEvTLZXPFoLqjzbiUPPKrKMqjLrtki": 50
-          }
+            tz1MToiEvTLZXPFoLqjzbiUPPKrKMqjLrtki: 50,
+          },
         },
         attributes: [
           {
@@ -164,16 +170,29 @@ export default function PromptForm({ prompt, setPrompt, minter }) {
 
                       {predictionURL && (
                         <div className="flex flex-col m-4 ml-8 max-w-xs">
-                          <text className="text-2xl italic font-serif font-extralight ">
+                          <text className="text-2xl mt-2 italic font-serif font-extralight ">
                             &quot;{prompt}&quot;
                           </text>
-                          <button
-                            className="mt-8 flex items-center justify-center rounded-md border-2 border-cyan-700 bg-cyan-700 px-4 py-2 font-bold shadow-lg text-gray-50"
-                            onClick={handleMint}
-                            disabled={isMinting}
-                          >
-                            {isMinting ? "Minting..." : "Mint NFT"}
-                          </button>
+
+                          {!minter && (
+                            <button
+                              className="mt-8 disabled flex items-center justify-center cursor-not-allowed rounded-md border-2 border-cyan-700 bg-cyan-700 px-4 py-2 font-bold shadow-lg text-gray-50"
+                              disabled
+                            >
+                              Mint NFT
+                            </button>
+                          )}
+
+                          {minter && (
+                            <button
+                              className="mt-8 disabled flex items-center justify-center rounded-md border-2 border-cyan-700 bg-cyan-700 px-4 py-2 font-bold shadow-lg text-gray-50"
+                              onClick={handleMint}
+                              disabled={isMinting}
+                            >
+                              {isMinting ? "Minting..." : "Mint NFT"}
+                            </button>
+                          )}
+
                           <button
                             className="text-cyan-800 mt-3 flex items-center justify-center rounded-md border-2 border-cyan-700 px-4 py-2 font-bold shadow-sm text-sm"
                             onClick={() => setOpen(false)}
@@ -195,7 +214,7 @@ export default function PromptForm({ prompt, setPrompt, minter }) {
         <div className="flex flex-row justify-center items-center p-2">
           <input
             type="text"
-            defaultValue={prompt}
+            // defaultValue={prompt}
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
             name="prompt"

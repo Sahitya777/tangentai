@@ -93,6 +93,7 @@ export default function Home() {
         </h1>
         <div className="flex flex-col mt-2">
           <PromptForm
+            connect={connectWallet}
             handleSubmit={handleSubmit}
             prompt={prompt}
             setPrompt={setPrompt}

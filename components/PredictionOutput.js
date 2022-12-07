@@ -18,9 +18,11 @@ const PredictionOutput = ({ imgURL, loading }) => {
           <div className="flex justify-center pt-52">
             <Spinner />
           </div>
-          <h1 className="text-center mt-6 mx-2 text-lg font-bold">
-            Generating your masterpiece 🎨
-          </h1>
+          <div className="">
+            <h1 className="text-center mt-6 mx-2 text-lg font-bold">
+              Generating your masterpiece 🎨
+            </h1>
+          </div>
         </div>
       )}
     </div>
