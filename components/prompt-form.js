@@ -60,8 +60,9 @@ export default function PromptForm({
       });
 
       const metadata = await client.storeCar(car);
-      console.log("metadata", metadata);
-      console.log("token", token);
+      // console.log("metadata", metadata);
+      // console.log("token", token);
+      console.log(`https://gateway.ipfs.io/ipfs/${metadata}/metadata.json`);
 
       await mintNFT({
         tezos,
